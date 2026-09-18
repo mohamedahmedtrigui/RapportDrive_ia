@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     db_database: str = "rapportdrive"
     db_username: str = "root"
     db_password: str = ""
+    # Required by managed MySQL providers that enforce TLS (e.g. Aiven) —
+    # path to the provider's CA certificate file bundled into the deploy.
+    db_ssl_ca: str | None = None
 
     @property
     def cors_origin_list(self) -> list[str]:

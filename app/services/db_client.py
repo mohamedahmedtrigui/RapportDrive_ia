@@ -7,6 +7,8 @@ _settings = get_settings()
 
 
 def _connect():
+    ssl_kwargs = {"ssl": {"ca": _settings.db_ssl_ca}} if _settings.db_ssl_ca else {}
+
     return pymysql.connect(
         host=_settings.db_host,
         port=_settings.db_port,
@@ -15,6 +17,7 @@ def _connect():
         password=_settings.db_password,
         cursorclass=pymysql.cursors.DictCursor,
         connect_timeout=5,
+        **ssl_kwargs,
     )
 
 
