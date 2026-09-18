@@ -16,6 +16,9 @@ venv/
 env/
 ENV/
 
+# Local vector store data
+chroma_data/
+
 # Env files
 .env
 .env.local
