@@ -23,6 +23,10 @@ chroma_data/
 .env
 .env.local
 .env.*.local
+.env.deploy
+
+# CA certs pulled in for TLS DB connections
+certs/
 
 # Testing / coverage
 .pytest_cache/

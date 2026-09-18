@@ -1,3 +1,5 @@
+import ssl
+
 import pymysql
 import pymysql.cursors
 
@@ -6,8 +8,25 @@ from app.config import get_settings
 _settings = get_settings()
 
 
+def _ssl_kwargs() -> dict:
+    if _settings.db_ssl_ca:
+        # Full certificate verification when a CA file is available.
+        return {"ssl": {"ca": _settings.db_ssl_ca}}
+
+    if _settings.db_ssl:
+        # Encrypted but unverified — enough for providers like Aiven that
+        # enforce TLS, without needing to bundle their CA cert into the
+        # deploy. Upgrade to db_ssl_ca above if stricter verification matters.
+        ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        return {"ssl": ctx}
+
+    return {}
+
+
 def _connect():
-    ssl_kwargs = {"ssl": {"ca": _settings.db_ssl_ca}} if _settings.db_ssl_ca else {}
+    ssl_kwargs = _ssl_kwargs()
 
     return pymysql.connect(
         host=_settings.db_host,

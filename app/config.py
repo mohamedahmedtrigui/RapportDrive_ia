@@ -27,8 +27,11 @@ class Settings(BaseSettings):
     db_database: str = "rapportdrive"
     db_username: str = "root"
     db_password: str = ""
-    # Required by managed MySQL providers that enforce TLS (e.g. Aiven) —
-    # path to the provider's CA certificate file bundled into the deploy.
+    # Set true for managed MySQL providers that enforce TLS (e.g. Aiven) —
+    # encrypted, not certificate-verified (no CA file needed).
+    db_ssl: bool = False
+    # Optional: path to the provider's CA certificate for full verification,
+    # takes precedence over db_ssl above when set.
     db_ssl_ca: str | None = None
 
     @property
